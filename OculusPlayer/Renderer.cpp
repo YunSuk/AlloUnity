@@ -1,10 +1,6 @@
 #include "Renderer.hpp"
 
-#include "Win32_GLAppUtil.h"
-#include <Kernel/OVR_System.h>
 
-// Include the Oculus SDK
-#include "OVR_CAPI_GL.h"
 
 using namespace OVR;
 
@@ -132,26 +128,26 @@ void Renderer::OculusInit(){
 	OVR::System::Init();
 
 	// Initialise rift
-	if (ovr_Initialize(nullptr) != ovrSuccess) { MessageBoxA(NULL, "Unable to initialize libOVR.", "", MB_OK); return 0; }
-	ovrHmd HMD;
+	if (ovr_Initialize(nullptr) != ovrSuccess) { MessageBoxA(NULL, "Unable to initialize libOVR.", "", MB_OK); return; }
+	
 	ovrResult result = ovrHmd_Create(0, &HMD);
 	if (!OVR_SUCCESS(result))
 	{
 		result = ovrHmd_CreateDebug(ovrHmd_DK2, &HMD);
 	}
 
-	if (!OVR_SUCCESS(result)) { MessageBoxA(NULL, "Oculus Rift not detected.", "", MB_OK); ovr_Shutdown(); return 0; }
+	if (!OVR_SUCCESS(result)) { MessageBoxA(NULL, "Oculus Rift not detected.", "", MB_OK); ovr_Shutdown(); return; }
 	if (HMD->ProductName[0] == '\0') MessageBoxA(NULL, "Rift detected, display not enabled.", "", MB_OK);
 
 	// Setup Window and Graphics
 	// Note: the mirror window can be any size, for this sample we use 1/2 the HMD resolution
 	ovrSizei windowSize = { HMD->Resolution.w / 2, HMD->Resolution.h / 2 };
 	if (!Platform.InitWindowAndDevice(hinst, Recti(Vector2i(0), windowSize), true, L"Oculus Room Tiny (GL)"))
-		return 0;
+		return;
 
 	// Make eye render buffers
-	TextureBuffer * eyeRenderTexture[2];
-	DepthBuffer   * eyeDepthBuffer[2];
+	
+	
 	for (int i = 0; i<2; i++)
 	{
 		ovrSizei idealTextureSize = ovrHmd_GetFovTextureSize(HMD, (ovrEyeType)i, HMD->DefaultEyeFov[i], 1);
@@ -160,17 +156,17 @@ void Renderer::OculusInit(){
 	}
 
 	// Create mirror texture and an FBO used to copy mirror texture to back buffer
-	ovrGLTexture* mirrorTexture;
+	
 	ovrHmd_CreateMirrorTextureGL(HMD, GL_RGBA, windowSize.w, windowSize.h, (ovrTexture**)&mirrorTexture);
 	// Configure the mirror read buffer
-	GLuint mirrorFBO = 0;
+	mirrorFBO = 0;
 	glGenFramebuffers(1, &mirrorFBO);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFBO);
 	glFramebufferTexture2D(GL_READ_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, mirrorTexture->OGL.TexId, 0);
 	glFramebufferRenderbuffer(GL_READ_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, 0);
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 
-	ovrEyeRenderDesc EyeRenderDesc[2];
+	
 	EyeRenderDesc[0] = ovrHmd_GetRenderDesc(HMD, ovrEye_Left, HMD->DefaultEyeFov[0]);
 	EyeRenderDesc[1] = ovrHmd_GetRenderDesc(HMD, ovrEye_Right, HMD->DefaultEyeFov[1]);
 
@@ -205,7 +201,7 @@ void Renderer::OculusRenderLoop(){
 
 	// Animate the cube
 	static float cubeClock = 0;
-	roomScene.Models[0]->Pos = Vector3f(9 * sin(cubeClock), 3, 9 * cos(cubeClock += 0.015f));
+	scene->Models[0]->Pos = Vector3f(9 * sin(cubeClock), 3, 9 * cos(cubeClock += 0.015f));
 
 	// Get eye poses, feeding in correct IPD offset
 	ovrVector3f               ViewOffset[2] = { EyeRenderDesc[0].HmdToEyeViewOffset,
@@ -216,8 +212,7 @@ void Renderer::OculusRenderLoop(){
 	ovrTrackingState hmdState = ovrHmd_GetTrackingState(HMD, ftiming.DisplayMidpointSeconds);
 	ovr_CalcEyePoses(hmdState.HeadPose.ThePose, ViewOffset, EyeRenderPose);
 
-	if (isVisible)
-	{
+	
 		for (int eye = 0; eye<2; eye++)
 		{
 			// Increment to use next texture, just before writing
@@ -237,7 +232,7 @@ void Renderer::OculusRenderLoop(){
 			Matrix4f proj = ovrMatrix4f_Projection(HMD->DefaultEyeFov[eye], 0.2f, 1000.0f, ovrProjection_RightHanded);
 
 			// Render world
-			roomScene.Render(view, proj);
+			scene->Render(view, proj);
 
 			// Avoids an error when calling SetAndClearRenderSurface during next iteration.
 			// Without this, during the next while loop iteration SetAndClearRenderSurface
@@ -245,7 +240,7 @@ void Renderer::OculusRenderLoop(){
 			// associated with COLOR_ATTACHMENT0 had been unlocked by calling wglDXUnlockObjectsNV.
 			eyeRenderTexture[eye]->UnsetRenderSurface();
 		}
-	}
+	
 
 	// Do distortion rendering, Present and flush/sync
 
@@ -269,7 +264,7 @@ void Renderer::OculusRenderLoop(){
 
 	ovrLayerHeader* layers = &ld.Header;
 	ovrResult result = ovrHmd_SubmitFrame(HMD, 0, &viewScaleDesc, &layers, 1);
-	isVisible = OVR_SUCCESS(result);
+	//isVisible = OVR_SUCCESS(result);
 
 	// Blit mirror texture to back buffer
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, mirrorFBO);

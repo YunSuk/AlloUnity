@@ -55,14 +55,13 @@ private:
 
 
 	HINSTANCE hinst;
-	OculusTexture * pEyeRenderTexture[2];
-	ovrTexture*          mirrorTexture;
+	TextureBuffer * eyeRenderTexture[2];
+	ovrGLTexture* mirrorTexture;
 	ovrHmd HMD;
 	Scene *scene;
-	Camera mainCam;
-	ovrEyeRenderDesc eyeRenderDesc[2];
-	DepthBuffer    * pEyeDepthBuffer[2];
-	ovrRecti         eyeRenderViewport[2];
+	ovrEyeRenderDesc EyeRenderDesc[2];
+	DepthBuffer   * eyeDepthBuffer[2];
+	GLuint mirrorFBO;
 
 	void OculusRelease();
 	void OculusInit();

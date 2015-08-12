@@ -6,7 +6,7 @@ set(SOURCES
 	
 set(HEADERS
     Renderer.hpp
-    Win32_DirectXAppUtil.h
+#    Win32_DirectXAppUtil.h
     Win32_GLAppUtil.h
 )
 

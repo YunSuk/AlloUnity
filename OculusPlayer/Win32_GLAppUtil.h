@@ -16,7 +16,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  *************************************************************************************/
-
+#ifndef WIN32_GLAPPUTIL_H
+#define WIN32_GLAPPUTIL_H
+#endif
 #include <GL/CAPI_GLE.h>
 #include <Extras/OVR_Math.h>
 #include <Kernel/OVR_Log.h>
