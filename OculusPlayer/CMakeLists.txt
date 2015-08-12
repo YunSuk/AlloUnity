@@ -7,6 +7,7 @@ set(SOURCES
 set(HEADERS
     Renderer.hpp
     Win32_DirectXAppUtil.h
+    Win32_GLAppUtil.h
 )
 
 find_package(Boost
@@ -28,11 +29,13 @@ target_include_directories(OculusPlayer
 	${SDL_INCLUDE_DIR}
 	${FFMPEG_INCLUDE_DIRS}
 	${OCULUS_SDK_INCLUDE_DIRS}
+  ${OCULUS_SDK_ROOT_DIR}/LibOVRKernel/Src
 )
 target_link_libraries(OculusPlayer
 	${Boost_LIBRARIES}
 	${SDL_LIBRARY}
 	${OCULUS_SDK_LIBRARIES}
+  ${OCULUS_SDK_KERNEL_LIBRARIES}
     AlloReceiver
     winmm.lib 
     ws2_32.lib

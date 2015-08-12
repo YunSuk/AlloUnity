@@ -17,12 +17,11 @@
 #include "AlloReceiver/AlloReceiver.h"
 
 
-// Include DirectX
-#include "Win32_DirectXAppUtil.h" 
+#include "Win32_GLAppUtil.h"
+#include <Kernel/OVR_System.h>
 
 // Include the Oculus SDK
-#define   OVR_D3D_VERSION 11
-#include "OVR_CAPI_D3D.h"
+#include "OVR_CAPI_GL.h"
 
 
 
