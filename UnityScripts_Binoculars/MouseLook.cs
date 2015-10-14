@@ -42,32 +42,32 @@ public class MouseLook : MonoBehaviour {
 	public float offsetX = 0.0F;
 	public float offsetY = 335.0F;
 	public float offsetZ = 0.0F;
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getRoll ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getPitch ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getYaw ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getDragX ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getDragY ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getPSQuatW ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getPSQuatX ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getPSQuatY();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern float getPSQuatZ ();
 	
 	Quaternion mobileDeviceRotation;

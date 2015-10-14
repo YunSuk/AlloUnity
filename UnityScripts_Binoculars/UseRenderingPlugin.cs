@@ -21,16 +21,16 @@ public class UseRenderingPlugin : MonoBehaviour {
 	Color[] correctSelectionIndicator;
 	Color[] incorrectSelectionIndicator;
 	
-	[DllImport ("UnityServerPlugin")]
+	[DllImport ("RenderingPlugin_Binoculars")]
 	private static extern void SetTextureFromUnity (System.IntPtr texture);
 
-	[DllImport ("UnityServerPlugin")]
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern void setLog ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern void endServer ();
-	
-	[DllImport ("UnityServerPlugin")]
+
+    [DllImport("RenderingPlugin_Binoculars")]
 	private static extern void SetTimeFromUnity (float t);
 	
 	
